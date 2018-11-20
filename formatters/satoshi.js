@@ -1,0 +1,9 @@
+const cleanFloat = n => parseFloat((n + '').replace(/\,/g, ''))
+
+module.exports = function formatSatoshi (num) {
+  const n = cleanFloat(num)
+
+  if (!n || typeof n !== 'number') return '0'
+  if (n === 1) return '1'
+  return n.toFixed(8)
+}

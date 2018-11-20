@@ -1,0 +1,36 @@
+{
+  "name": "block-ql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo 'Error: no test specified' && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "canvas": "^1.6.9",
+    "cors": "^2.8.4",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.15.2",
+    "graphql": "^0.9.3",
+    "graphql-server-express": "^0.7.2",
+    "graphql-tools": "^0.11.0",
+    "lodash": "^4.17.4",
+    "math-stats": "^0.3.1",
+    "memory-cache": "^0.2.0",
+    "node-fetch": "^1.6.3",
+    "node-highcharts": "0.0.2",
+    "plotly": "^1.0.6",
+    "pretty-json": "^0.1.1",
+    "prettyjson": "^1.2.1"
+  },
+  "devDependencies": {
+    "cli-apply": "^1.0.7",
+    "cli-table": "^0.3.1",
+    "jest": "^21.2.1"
+  }
+}

@@ -1,0 +1,27 @@
+service: block-ql
+provider:
+  name: aws
+  runtime: nodejs6.10
+
+functions:
+  graphQl:
+    handler: lambda.graphql
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+  fbVerify:
+    handler: lambda.fbverify
+    events:
+      - http:
+          path: facebook
+          method: get
+          cors: true
+  fbWebhook:
+    handler: lambda.fbwebhook
+    events:
+      - http:
+          path: facebook
+          method: post
+          cors: true
