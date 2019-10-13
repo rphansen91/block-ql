@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
+    "dev": "nodemon -e ts -w ./src -x NODE_ENV=development ts-node index.ts",
+    "start": "node ./dist/index.js",
+    "generate": "graphql-codegen",
+    "build": "npm run tslint && npm run build-ts",
     "test": "echo 'Error: no test specified' && exit 1"
   },
   "keywords": [],
@@ -12,18 +15,24 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.512.0",
-    "body-parser": "^1.17.1",
-    "canvas": "^2.6.0",
     "cheerio": "^1.0.0-rc.3",
+    "@types/graphql-type-json": "^0.3.2",
+    "apollo-server": "^2.9.6",
+    "apollo-server-express": "^2.9.6",
+    "apollo-server-lambda": "^2.9.6",
+    "body-parser": "^1.17.1",
     "cors": "^2.8.4",
     "crypto-js": "^3.1.9-1",
     "express": "^4.15.2",
-    "graphql": "^0.9.3",
+    "graphql": "^14.5.8",
     "graphql-server-express": "^0.7.2",
+    "graphql-tag": "^2.10.1",
     "graphql-tools": "^0.11.0",
-    "lodash": "^4.17.4",
+    "graphql-type-json": "^0.3.0",
+    "lodash": "^4.17.15",
     "math-stats": "^0.3.1",
     "memory-cache": "^0.2.0",
+    "merge-graphql-schemas": "^1.7.0",
     "node-fetch": "^1.6.3",
     "node-highcharts": "0.0.2",
     "nodemailer": "^6.3.0",
@@ -34,9 +43,19 @@
     "zlib": "^1.0.5"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.8.1",
+    "@graphql-codegen/typescript": "^1.8.1",
+    "@graphql-codegen/typescript-operations": "^1.8.1",
+    "@graphql-codegen/typescript-react-apollo": "^1.8.1",
+    "@graphql-codegen/typescript-resolvers": "^1.8.1",
+    "@types/node-fetch": "^2.5.2",
     "cli-apply": "^1.0.7",
     "cli-table": "^0.3.1",
     "jest": "^21.2.1",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "serverless": "^1.54.0",
+    "serverless-webpack": "^5.3.1",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
   }
 }

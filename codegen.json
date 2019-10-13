@@ -1,0 +1,8 @@
+{
+  "schema": "./src/resolvers/**/schema.ts",
+  "generates": {
+    "./src/resolvers/types.ts": {
+      "plugins": ["typescript", "typescript-operations", "typescript-resolvers"]
+    }
+  }
+}

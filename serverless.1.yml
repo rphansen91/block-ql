@@ -1,0 +1,90 @@
+service: api-xyo-checkout-apollo
+
+package:
+  exclude:
+    - files/**
+    - diviner-store/**
+    - bindings/**
+    - src/**
+    - .rpt2_cache/**
+
+plugins:
+  - serverless-webpack
+  - serverless-domain-manager
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+functions:
+  rebilly-event:
+    handler: webhooks.rebillyEvent
+    events:
+      - http:
+          path: /rebilly-event
+          method: any
+          cors:
+            origin: '*'
+            headers:
+              - X-Auth-Token
+  customers-subscriptions:
+    handler: customers.rebillySubscriptions
+    events:
+      - http:
+          path: /customers/subscriptions/{email}
+          method: any
+          request:
+            parameters:
+              paths:
+                email: true
+          cors:
+            origin: '*'
+      - http:
+          path: /customers/subscriptions
+          method: any
+          cors:
+            origin: '*'
+  graphql:
+    handler: lambda.handler
+    events:
+      - http:
+          path: /graphql
+          method: any
+          cors:
+            origin: '*'
+            headers:
+              - X-Redirect
+              - Content-Type
+              - X-Auth-Token
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Apollo-Tracing
+              - X-Forward-For
+              - REB-APIKEY
+      - http:
+          path: /
+          method: any
+          cors:
+            origin: '*'
+            headers:
+              - X-Redirect
+              - Content-Type
+              - X-Auth-Token
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Apollo-Tracing
+              - X-Forward-For
+              - REB-APIKEY
+
+custom:
+  customDomain:
+    certificateName: '*.xy.company'
+    domainName: ${opt:stage, 'dev'}-checkout-apollo.xy.company
+    stage: ${opt:stage, 'dev'}
+    createRoute53Record: true
