@@ -170,6 +170,18 @@ export type Pair = {
   value?: Maybe<Scalars['Float']>,
 };
 
+export type Product = {
+   __typename?: 'Product',
+  name: Scalars['String'],
+  amount: Scalars['Int'],
+  description: Scalars['String'],
+  images?: Maybe<Array<Scalars['String']>>,
+  currency?: Maybe<Scalars['String']>,
+  session?: Maybe<Scalars['String']>,
+  shippable?: Maybe<Scalars['Boolean']>,
+  tags?: Maybe<Array<Scalars['String']>>,
+};
+
 export type Query = {
    __typename?: 'Query',
   address?: Maybe<Address>,
@@ -181,6 +193,7 @@ export type Query = {
   coins?: Maybe<Array<Maybe<Coin>>>,
   exchange?: Maybe<Exchange>,
   news?: Maybe<Array<Maybe<Article>>>,
+  products?: Maybe<Array<Product>>,
   empty?: Maybe<Scalars['String']>,
   transaction?: Maybe<Transaction>,
 };
@@ -232,6 +245,11 @@ export type QueryNewsArgs = {
   q?: Maybe<Scalars['String']>,
   sortBy?: Maybe<Scalars['String']>,
   from?: Maybe<Scalars['String']>
+};
+
+
+export type QueryProductsArgs = {
+  q?: Maybe<Scalars['String']>
 };
 
 
@@ -364,6 +382,7 @@ export type ResolversTypes = {
   Exchange: ResolverTypeWrapper<Exchange>,
   ExchangeBalance: ResolverTypeWrapper<ExchangeBalance>,
   ExchangeTx: ResolverTypeWrapper<ExchangeTx>,
+  Product: ResolverTypeWrapper<Product>,
   Mutation: ResolverTypeWrapper<{}>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   Pagination: Pagination,
@@ -389,6 +408,7 @@ export type ResolversParentTypes = {
   Exchange: Exchange,
   ExchangeBalance: ExchangeBalance,
   ExchangeTx: ExchangeTx,
+  Product: Product,
   Mutation: {},
   JSON: Scalars['JSON'],
   Pagination: Pagination,
@@ -502,6 +522,17 @@ export type PairResolvers<ContextType = any, ParentType extends ResolversParentT
   value?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
 };
 
+export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  images?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>,
+  currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  session?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  shippable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  tags?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>,
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   address?: Resolver<Maybe<ResolversTypes['Address']>, ParentType, ContextType, RequireFields<QueryAddressArgs, 'addr'>>,
   addressValid?: Resolver<Maybe<ResolversTypes['AddressValid']>, ParentType, ContextType, RequireFields<QueryAddressValidArgs, 'addr'>>,
@@ -512,6 +543,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   coins?: Resolver<Maybe<Array<Maybe<ResolversTypes['Coin']>>>, ParentType, ContextType, QueryCoinsArgs>,
   exchange?: Resolver<Maybe<ResolversTypes['Exchange']>, ParentType, ContextType, RequireFields<QueryExchangeArgs, 'name'>>,
   news?: Resolver<Maybe<Array<Maybe<ResolversTypes['Article']>>>, ParentType, ContextType, QueryNewsArgs>,
+  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType, QueryProductsArgs>,
   empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QueryTransactionArgs, 'txid'>>,
 };
@@ -557,6 +589,7 @@ export type Resolvers<ContextType = any> = {
   JSON?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Pair?: PairResolvers<ContextType>,
+  Product?: ProductResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Send?: SendResolvers<ContextType>,
   Transaction?: TransactionResolvers<ContextType>,

@@ -12,6 +12,8 @@ import exchangeDefs from './exchange/schema'
 import { exchangeQuery, exchangeResolvers, exchangeBalanceResolvers, exchangeTxResolvers } from './exchange/resolvers'
 import newsDefs from './news/schema'
 import { newsQuery, articleResolvers } from './news/resolvers'
+import productDefs from './product/schema'
+import { productQuery, productResolvers } from './product/resolvers'
 import transactionDefs from './transaction/schema'
 import { transactionQuery, transactionMutation, transactionResolvers } from './transaction/resolvers'
 
@@ -22,6 +24,7 @@ export const typeDefs = mergeTypes([
   coinDefs,
   exchangeDefs,
   newsDefs,
+  productDefs,
   transactionDefs
 ])
 
@@ -32,6 +35,7 @@ export const resolvers = defaultsDeep({
     ...coinQuery,
     ...exchangeQuery,
     ...newsQuery,
+    ...productQuery,
     ...transactionQuery
   },
   Mutation: {
@@ -46,6 +50,7 @@ export const resolvers = defaultsDeep({
   Exchange: exchangeResolvers,
   ExchangeBalance: exchangeBalanceResolvers,
   ExchangeTx: exchangeTxResolvers,
+  Product: productResolvers,
   Transaction: transactionResolvers,
   JSON: GraphQLJSON
 })

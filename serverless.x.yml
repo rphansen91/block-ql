@@ -1,20 +1,16 @@
 service: block-ql
-
-package:
-  exclude:
-    - files/**
-    - diviner-store/**
-    - bindings/**
-    - src/**
-    - .rpt2_cache/**
-
-plugins:
-  - serverless-webpack
-  - serverless-domain-manager
-
 provider:
   name: aws
   runtime: nodejs10.x
+  environment:
+    STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+    STRIPE_SUCCESS_URL: https://hodlstream.com/success
+    STRIPE_CANCEL_URL: https://hodlstream.com/shop
+    SERVER_URI: https://laqr73ujn2.execute-api.us-east-1.amazonaws.com/dev
+    FROM: HODL Stream <rphansen91@gmail.com>
+    RECIPIENTS: rphansen91@gmail.com
+    ARTICLES_KEY: articles
+    RESOURCE_BUCKET: hodlstream-resources
 
 functions:
   graphQl:
@@ -75,10 +71,3 @@ functions:
             parameters: 
               paths: 
                 id: true
-
-# custom:
-#   customDomain:
-#     certificateName: '*.xy.company'
-#     domainName: ${opt:stage, 'dev'}-checkout-apollo.xy.company
-#     stage: ${opt:stage, 'dev'}
-#     createRoute53Record: true
