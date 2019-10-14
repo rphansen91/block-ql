@@ -6,13 +6,13 @@ import qs from 'querystring';
 
 export async function fetchCachedArticles () {
     const data = await fetchResource('articles')
-    return data
+    return data as Article[]
 }
 
 export async function getArticles (args: QueryNewsArgs): Promise<Article[]> {
-    const cachedArticles = await fetchResource('articles')
+    const cachedArticles = await fetchCachedArticles()
     const fireArticles = await fireFetch('articles')
-    return articlesFilter([].concat(cachedArticles, fireArticles), args)
+    return articlesFilter(([] as Article[]).concat(cachedArticles, fireArticles), args)
 }
 
 export async function findNewArticles () {
@@ -20,7 +20,7 @@ export async function findNewArticles () {
         cachedNews,
         currentNews
     ] = await Promise.all([
-        fetchResource('articles').catch(() => ([])),
+        fetchCachedArticles().catch(() => ([] as Article[])),
         fetchNewsApi({ q: 'cryptocurrency' }),
     ])
     const cachedNewsById = groupBy(cachedNews, generateArticleId)

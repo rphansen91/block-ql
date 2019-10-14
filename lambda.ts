@@ -3,6 +3,7 @@ import { typeDefs, resolvers, context } from './src/index'
 import { findNewArticles, fetchCachedArticles } from './src/context/news'
 import { sendPublicationNotifications } from './src/context/notification'
 import { compressAndCache } from './src/utils/s3'
+import { Article } from './src/resolvers/types'
 const { response, parser, logger, query } = require('./utils')
 const { handleMessage, handlePostback } = require('./facebook')
 
@@ -14,9 +15,14 @@ const server = new ApolloServer({
   introspection: true,
 })
 
-exports.graphql = server.createHandler();
+exports.graphql = server.createHandler({
+  cors: {
+    origin: '*',
+    credentials: true,
+  }
+});
 
-module.exports.fbverify = function (event, context, cb) {
+module.exports.fbverify = function (event: any, context: any, cb: any) {
   if (query(event)['hub.verify_token'] === 'testbot_verify_token') {
     cb(null, response.text(query(event)['hub.challenge']));
   } else {
@@ -24,7 +30,7 @@ module.exports.fbverify = function (event, context, cb) {
   }
 }
 
-module.exports.fbwebhook = function (event, context, cb) {
+module.exports.fbwebhook = function (event: any, context: any, cb: any) {
   context.callbackWaitsForEmptyEventLoop = false
   logger('Received webhook')(event)
 
@@ -32,7 +38,7 @@ module.exports.fbwebhook = function (event, context, cb) {
   .then(parser(event))
   .then(({ entry=[] }: any) => entry)
   .then(entries => {
-    return entries.map(function(entry) {
+    return entries.map((entry: any) => {
       let webhook_event = entry.messaging[0]
       let sender_psid = webhook_event.sender.id
       logger('Sender PSID')(sender_psid)
@@ -51,7 +57,7 @@ module.exports.fbwebhook = function (event, context, cb) {
   .catch(err => cb(null, response.err(err)))
 }
 
-module.exports.cacheNews = function (event, context, cb) {
+module.exports.cacheNews = function (event: any, context: any, cb: any) {
   context.callbackWaitsForEmptyEventLoop = false
   logger('Caching news')('')
 
@@ -59,8 +65,11 @@ module.exports.cacheNews = function (event, context, cb) {
   .then(() => findNewArticles())
   .then(logger('New Articles'))
   .then(({ allArticles, toBeInserted }) => Promise.all([
-    compressAndCache('articles', allArticles),
-    sendPublicationNotifications('New Articles', toBeInserted)
+    updateArticlesCache(allArticles),
+    sendPublicationNotifications(
+      'New Articles', 
+      toBeInserted
+    )
     .catch(logger('Publication Notifications Error'))
   ]))
   .then(logger('News Update Success'))
@@ -68,7 +77,7 @@ module.exports.cacheNews = function (event, context, cb) {
   .catch(err => cb(null, response.err(err)))
 }
 
-module.exports.activateArticle = (event, context, cb) => {
+module.exports.activateArticle = (event: any, context: any, cb: any) => {
   context.callbackWaitsForEmptyEventLoop = false
   const publishedAt = event.pathParameters.id
 
@@ -86,7 +95,7 @@ module.exports.activateArticle = (event, context, cb) => {
   .catch(err => cb(null, response.err(err)))
 }
 
-module.exports.deactivateArticle = (event, context, cb) => {
+module.exports.deactivateArticle = (event: any, context: any, cb: any) => {
   context.callbackWaitsForEmptyEventLoop = false
   const publishedAt = event.pathParameters.id
   logger('Received deactivation request')(event)
@@ -103,7 +112,7 @@ module.exports.deactivateArticle = (event, context, cb) => {
   .catch(err => cb(null, response.err(err)))
 }
 
-module.exports.postArticle = (event, context, cb) => {
+module.exports.postArticle = (event: any, context: any, cb: any) => {
   context.callbackWaitsForEmptyEventLoop = false
   const publishedAt = event.pathParameters.id
   logger('Received post request')(event)
@@ -130,7 +139,7 @@ module.exports.postArticle = (event, context, cb) => {
   .catch(err => cb(null, response.err(err)))
 }
 
-async function updateArticlesCache (allArticles) {
+async function updateArticlesCache (allArticles: Article[]) {
   await compressAndCache('articles', allArticles)
   return allArticles
 }

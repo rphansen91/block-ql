@@ -9,6 +9,9 @@ export const coinQuery: QueryResolvers<IContext> = {
   async coins(_, { ids, pair }, { coinMarketcap }) {
     if (!ids) return coinMarketcap.getAll(pair || undefined)
     return Promise.all(ids.map(id => coinMarketcap.getOne(id, pair || undefined)))
+  },
+  async all_coins(_, { pair }, { coinMarketcap }) {
+    return coinMarketcap.getAll(pair || undefined)
   }
 }
 

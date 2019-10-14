@@ -1,15 +1,19 @@
 import fetch from 'node-fetch'
 import { CoinHistoryArgs, Pair } from '../resolvers/types';
-import { fetchResource, compressAndCache } from '../utils/s3'
+import { Resource } from '../utils/s3'
 import qs from 'querystring'
 
-const one_hour = 60 * 60 * 1000
-
 export class CryptoCompare {
+    historyResource: Resource = new Resource
+
     async getHistory (symbol: string, { pair, limit }: CoinHistoryArgs): Promise<Pair[]> {
         const cacheKey = `coins/${symbol}/${pair}_history`
-        const current = await fetchResource(cacheKey, one_hour)
-        if (current) return current
+        return this.historyResource.use(cacheKey, async () => {
+            return this.fetch(symbol, { pair, limit })
+        })
+    }
+
+    async fetch (symbol: string, { pair, limit }: CoinHistoryArgs): Promise<Pair[]> {
         const res = await fetch('https://min-api.cryptocompare.com/data/histoday?' + qs.stringify({
             aggregate: 1,
             e: 'CCCAGG',
@@ -28,7 +32,6 @@ export class CryptoCompare {
             value: (symbol === pair) ? 1 : ((d.high + d.low) / 2),
             ts: d.time
         }))
-        await compressAndCache(cacheKey, result)
         return result
     }
 }

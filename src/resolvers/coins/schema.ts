@@ -30,5 +30,6 @@ export default gql`
   type Query {
     coin(id: String!, pair: String): Coin
     coins(ids: [String!], pair: String): [Coin]
+    all_coins(pair: String): [Coin]
   }
 `

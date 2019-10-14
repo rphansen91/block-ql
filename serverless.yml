@@ -10,7 +10,7 @@ package:
 
 plugins:
   - serverless-webpack
-  - serverless-domain-manager
+  # - serverless-domain-manager
 
 provider:
   name: aws
@@ -23,6 +23,10 @@ functions:
       - http:
           path: graphql
           method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
           cors: true
   fbVerify:
     handler: lambda.fbverify

@@ -48,14 +48,23 @@ export type AddressValid = {
 
 export type Article = {
    __typename?: 'Article',
-  source?: Maybe<Scalars['String']>,
+  id: Scalars['String'],
+  source?: Maybe<ArticleSource>,
   author?: Maybe<Scalars['String']>,
   title?: Maybe<Scalars['String']>,
   description?: Maybe<Scalars['String']>,
+  htmlContent?: Maybe<Scalars['String']>,
   content?: Maybe<Scalars['String']>,
   url?: Maybe<Scalars['String']>,
   urlToImage?: Maybe<Scalars['String']>,
   publishedAt?: Maybe<Scalars['String']>,
+  isActive?: Maybe<Scalars['Boolean']>,
+};
+
+export type ArticleSource = {
+   __typename?: 'ArticleSource',
+  id?: Maybe<Scalars['String']>,
+  name?: Maybe<Scalars['String']>,
 };
 
 export type Block = {
@@ -191,7 +200,9 @@ export type Query = {
   blockIndex?: Maybe<Block>,
   coin?: Maybe<Coin>,
   coins?: Maybe<Array<Maybe<Coin>>>,
+  all_coins?: Maybe<Array<Maybe<Coin>>>,
   exchange?: Maybe<Exchange>,
+  article?: Maybe<Article>,
   news?: Maybe<Array<Maybe<Article>>>,
   products?: Maybe<Array<Product>>,
   empty?: Maybe<Scalars['String']>,
@@ -236,8 +247,18 @@ export type QueryCoinsArgs = {
 };
 
 
+export type QueryAll_CoinsArgs = {
+  pair?: Maybe<Scalars['String']>
+};
+
+
 export type QueryExchangeArgs = {
   name: Scalars['String']
+};
+
+
+export type QueryArticleArgs = {
+  id: Scalars['String']
 };
 
 
@@ -379,6 +400,7 @@ export type ResolversTypes = {
   Coin: ResolverTypeWrapper<Coin>,
   Pair: ResolverTypeWrapper<Pair>,
   Article: ResolverTypeWrapper<Article>,
+  ArticleSource: ResolverTypeWrapper<ArticleSource>,
   Exchange: ResolverTypeWrapper<Exchange>,
   ExchangeBalance: ResolverTypeWrapper<ExchangeBalance>,
   ExchangeTx: ResolverTypeWrapper<ExchangeTx>,
@@ -405,6 +427,7 @@ export type ResolversParentTypes = {
   Coin: Coin,
   Pair: Pair,
   Article: Article,
+  ArticleSource: ArticleSource,
   Exchange: Exchange,
   ExchangeBalance: ExchangeBalance,
   ExchangeTx: ExchangeTx,
@@ -438,14 +461,22 @@ export type AddressValidResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type ArticleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Article'] = ResolversParentTypes['Article']> = {
-  source?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  source?: Resolver<Maybe<ResolversTypes['ArticleSource']>, ParentType, ContextType>,
   author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  htmlContent?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   urlToImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   publishedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  isActive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+};
+
+export type ArticleSourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ArticleSource'] = ResolversParentTypes['ArticleSource']> = {
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type BlockResolvers<ContextType = any, ParentType extends ResolversParentTypes['Block'] = ResolversParentTypes['Block']> = {
@@ -541,7 +572,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   blockIndex?: Resolver<Maybe<ResolversTypes['Block']>, ParentType, ContextType, RequireFields<QueryBlockIndexArgs, 'height'>>,
   coin?: Resolver<Maybe<ResolversTypes['Coin']>, ParentType, ContextType, RequireFields<QueryCoinArgs, 'id'>>,
   coins?: Resolver<Maybe<Array<Maybe<ResolversTypes['Coin']>>>, ParentType, ContextType, QueryCoinsArgs>,
+  all_coins?: Resolver<Maybe<Array<Maybe<ResolversTypes['Coin']>>>, ParentType, ContextType, QueryAll_CoinsArgs>,
   exchange?: Resolver<Maybe<ResolversTypes['Exchange']>, ParentType, ContextType, RequireFields<QueryExchangeArgs, 'name'>>,
+  article?: Resolver<Maybe<ResolversTypes['Article']>, ParentType, ContextType, RequireFields<QueryArticleArgs, 'id'>>,
   news?: Resolver<Maybe<Array<Maybe<ResolversTypes['Article']>>>, ParentType, ContextType, QueryNewsArgs>,
   products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType, QueryProductsArgs>,
   empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -581,6 +614,7 @@ export type Resolvers<ContextType = any> = {
   Address?: AddressResolvers<ContextType>,
   AddressValid?: AddressValidResolvers<ContextType>,
   Article?: ArticleResolvers<ContextType>,
+  ArticleSource?: ArticleSourceResolvers<ContextType>,
   Block?: BlockResolvers<ContextType>,
   Coin?: CoinResolvers<ContextType>,
   Exchange?: ExchangeResolvers<ContextType>,
