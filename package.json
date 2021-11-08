@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/graphql-type-json": "^0.3.2",
-    "apollo-server": "^2.9.6",
+    "apollo-server": "^2.25.3",
     "apollo-server-express": "^2.9.6",
     "apollo-server-lambda": "^2.9.6",
     "aws-sdk": "^2.512.0",
